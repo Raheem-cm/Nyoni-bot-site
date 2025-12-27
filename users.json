@@ -1,0 +1,22 @@
+ [
+  {
+    "id": "demo_001",
+    "username": "admin",
+    "email": "admin@nyonibot.com",
+    "password": "admin123",
+    "plan": "pro",
+    "maxBots": 20,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "bots": [
+      {
+        "id": "bot_001",
+        "name": "Music Bot Demo",
+        "type": "discord",
+        "status": "online",
+        "uptime": "5d 3h",
+        "memory": "256MB",
+        "created": "2024-01-15"
+      }
+    ]
+  }
+ ]
