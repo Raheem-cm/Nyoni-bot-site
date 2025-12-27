@@ -267,3 +267,85 @@ document.addEventListener('DOMContentLoaded', function() {
                 const action = this.getAttribute('data-action');
                 const botId = this.getAttribute('data-bot');
                 const botCard = this.closest('.bot-card');
+                const statusElement = botCard?.querySelector('.bot-status');
+                
+                let newStatus = '';
+                let message = '';
+                
+                switch (action) {
+                    case 'start':
+                        newStatus = 'online';
+                        message = 'Bot started successfully!';
+                        break;
+                    case 'stop':
+                        newStatus = 'offline';
+                        message = 'Bot stopped successfully!';
+                        break;
+                    case 'restart':
+                        newStatus = 'pending';
+                        message = 'Bot restarting...';
+                        setTimeout(() => {
+                            if (statusElement) {
+                                statusElement.className = 'bot-status status-online';
+                                statusElement.textContent = 'ONLINE';
+                            }
+                            showNotification('Bot restarted successfully!', 'success');
+                        }, 2000);
+                        break;
+                    case 'edit':
+                        showNotification('Opening bot editor...', 'info');
+                        return;
+                }
+                
+                if (statusElement && newStatus) {
+                    statusElement.className = `bot-status status-${newStatus}`;
+                    statusElement.textContent = newStatus.toUpperCase();
+                }
+                
+                if (message) {
+                    showNotification(message, 'success');
+                }
+            });
+        });
+    }
+    
+    function logout() {
+        showNotification('Logging out...', 'info');
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 1500);
+    }
+    
+    // Notification function (same as in main script)
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+            <span>${message}</span>
+            <button class="notification-close">&times;</button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+        
+        notification.querySelector('.notification-close').addEventListener('click', () => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        });
+        
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }
+        }, 5000);
+    }
+});
