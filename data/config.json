@@ -1,0 +1,19 @@
+{
+  "site_name": "Nyoni Bot",
+  "site_url": "http://localhost",
+  "admin_email": "admin@nyonibot.com",
+  "max_bots_per_user": 5,
+  "allowed_types": ["discord", "telegram", "whatsapp"],
+  "plans": {
+    "free": {
+      "max_bots": 5,
+      "memory": "512MB",
+      "support": "basic"
+    },
+    "pro": {
+      "max_bots": 20,
+      "memory": "2GB",
+      "support": "priority"
+    }
+  }
+}
