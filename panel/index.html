@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,8 +18,8 @@
                     <i class="fas fa-robot"></i>
                     <span>Nyoni<span class="logo-highlight">Bot</span> Panel</span>
                 </div>
-                <h2>Welcome Back</h2>
-                <p>Sign in to your account to manage your bots</p>
+                <h2>Karibu Nyoni Bot</h2>
+                <p>Ingia au jisajili bure</p>
             </div>
             
             <div class="panel-tabs">
@@ -27,114 +27,126 @@
                 <button class="tab-btn" data-tab="register">Register</button>
             </div>
             
+            <!-- LOGIN FORM -->
             <div class="tab-content active" id="login">
-                <form id="login-form">
+                <form id="loginForm">
                     <div class="form-group">
-                        <label for="login-email">
-                            <i class="fas fa-envelope"></i> Email Address
+                        <label for="loginEmail">
+                            <i class="fas fa-user"></i> Email au Username
                         </label>
-                        <input type="email" id="login-email" placeholder="you@example.com" required>
+                        <input type="text" id="loginEmail" placeholder="weka email yako" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="login-password">
+                        <label for="loginPassword">
                             <i class="fas fa-lock"></i> Password
                         </label>
-                        <input type="password" id="login-password" placeholder="••••••••" required>
-                        <button type="button" class="show-password" data-target="login-password">
+                        <input type="password" id="loginPassword" placeholder="weka password yako" required>
+                        <button type="button" class="show-password" data-target="loginPassword">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
                     
                     <div class="form-options">
                         <label class="checkbox">
-                            <input type="checkbox"> Remember me
+                            <input type="checkbox" id="rememberMe"> Kumbuka Mimi
                         </label>
-                        <a href="#" class="forgot-password">Forgot password?</a>
+                        <a href="#" class="forgot-password">Umesahau password?</a>
                     </div>
                     
                     <button type="submit" class="btn-submit">
-                        <i class="fas fa-sign-in-alt"></i> Sign In
+                        <i class="fas fa-sign-in-alt"></i> Ingia Sasa
                     </button>
                     
                     <div class="divider">
-                        <span>or continue with</span>
+                        <span>au ingia na</span>
                     </div>
                     
                     <div class="social-login">
-                        <button type="button" class="social-btn github">
-                            <i class="fab fa-github"></i> GitHub
-                        </button>
-                        <button type="button" class="social-btn google">
+                        <button type="button" class="social-btn google" onclick="socialLogin('google')">
                             <i class="fab fa-google"></i> Google
                         </button>
-                        <button type="button" class="social-btn discord">
-                            <i class="fab fa-discord"></i> Discord
+                        <button type="button" class="social-btn github" onclick="socialLogin('github')">
+                            <i class="fab fa-github"></i> GitHub
                         </button>
                     </div>
                 </form>
             </div>
             
+            <!-- REGISTER FORM -->
             <div class="tab-content" id="register">
-                <form id="register-form">
+                <form id="registerForm">
                     <div class="form-group">
-                        <label for="register-username">
+                        <label for="registerUsername">
                             <i class="fas fa-user"></i> Username
                         </label>
-                        <input type="text" id="register-username" placeholder="Choose a username" required>
+                        <input type="text" id="registerUsername" placeholder="chagua username" required minlength="3">
                     </div>
                     
                     <div class="form-group">
-                        <label for="register-email">
-                            <i class="fas fa-envelope"></i> Email Address
+                        <label for="registerEmail">
+                            <i class="fas fa-envelope"></i> Email
                         </label>
-                        <input type="email" id="register-email" placeholder="you@example.com" required>
+                        <input type="email" id="registerEmail" placeholder="email yako halisi" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="register-password">
+                        <label for="registerPassword">
                             <i class="fas fa-lock"></i> Password
                         </label>
-                        <input type="password" id="register-password" placeholder="••••••••" required>
-                        <button type="button" class="show-password" data-target="register-password">
+                        <input type="password" id="registerPassword" placeholder="password (angalau herufi 6)" required minlength="6">
+                        <button type="button" class="show-password" data-target="registerPassword">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
                     
                     <div class="form-group">
-                        <label for="register-confirm">
-                            <i class="fas fa-lock"></i> Confirm Password
+                        <label for="registerConfirm">
+                            <i class="fas fa-lock"></i> Rudia Password
                         </label>
-                        <input type="password" id="register-confirm" placeholder="••••••••" required>
-                        <button type="button" class="show-password" data-target="register-confirm">
+                        <input type="password" id="registerConfirm" placeholder="andika password tena" required>
+                        <button type="button" class="show-password" data-target="registerConfirm">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
                     
                     <div class="form-options">
                         <label class="checkbox">
-                            <input type="checkbox" required> I agree to the 
-                            <a href="#">Terms of Service</a> and 
-                            <a href="#">Privacy Policy</a>
+                            <input type="checkbox" id="agreeTerms" required> Nakubaliana na 
+                            <a href="#" class="terms-link">Masharti ya Matumizi</a>
                         </label>
                     </div>
                     
                     <button type="submit" class="btn-submit">
-                        <i class="fas fa-user-plus"></i> Create Account
+                        <i class="fas fa-user-plus"></i> Jisajili Bure
                     </button>
                 </form>
             </div>
             
             <div class="panel-footer">
-                <a href="../index.html">
-                    <i class="fas fa-arrow-left"></i> Back to Home
+                <p>Una bot tayari? <a href="../index.html" class="demo-link">Angalia Demo</a></p>
+                <a href="../index.html" class="back-home">
+                    <i class="fas fa-arrow-left"></i> Rudi Nyumbani
                 </a>
             </div>
         </div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script src="../assets/js/particles.js"></script>
+
+    <!-- LOADING SPINNER -->
+    <div id="loadingSpinner" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Inafanya kazi...</p>
+    </div>
+
     <script src="panel.js"></script>
+    <script>
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is already logged in
+            if(localStorage.getItem('nyoni_user')) {
+                window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
 </body>
 </html>
