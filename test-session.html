@@ -1,0 +1,202 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Test RAHEEM Sessions</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .test-box { 
+            background: #f5f5f5; 
+            padding: 20px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+        }
+        button { 
+            padding: 10px 15px; 
+            margin: 5px; 
+            background: #7C3AED; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+        }
+        .result { 
+            background: white; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-left: 4px solid #7C3AED; 
+        }
+        .token { 
+            font-family: monospace; 
+            background: #eee; 
+            padding: 5px; 
+            word-break: break-all; 
+        }
+    </style>
+</head>
+<body>
+    <h2>🔧 Test RAHEEM Sessions</h2>
+    
+    <div class="test-box">
+        <h3>1. Generate RAHEEM Token</h3>
+        <button onclick="generateToken()">Generate RAHEEM Token</button>
+        <div id="tokenResult" class="result"></div>
+    </div>
+    
+    <div class="test-box">
+        <h3>2. Test Login with RAHEEM</h3>
+        <input type="text" id="testEmail" placeholder="Email" value="admin@nyonibot.com">
+        <input type="password" id="testPassword" placeholder="Password" value="admin123">
+        <button onclick="testLogin()">Test Login</button>
+        <div id="loginResult" class="result"></div>
+    </div>
+    
+    <div class="test-box">
+        <h3>3. Check Current Session</h3>
+        <button onclick="checkSession()">Check Session</button>
+        <button onclick="clearSession()">Clear Session</button>
+        <div id="sessionResult" class="result"></div>
+    </div>
+    
+    <div class="test-box">
+        <h3>4. Test API Endpoints</h3>
+        <button onclick="testAPI('login')">Test /api/deploy.php?action=login</button>
+        <button onclick="testAPI('check_session')">Test Session Check</button>
+        <div id="apiResult" class="result"></div>
+    </div>
+
+    <script>
+        function generateToken() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let token = 'RAHEEM-';
+            
+            for (let i = 0; i < 8; i++) {
+                token += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            
+            document.getElementById('tokenResult').innerHTML = `
+                <strong>Generated Token:</strong><br>
+                <div class="token">${token}</div>
+                <br>
+                <strong>Format Check:</strong> ${token.startsWith('RAHEEM-') ? '✅ Valid' : '❌ Invalid'}
+            `;
+            
+            // Save to localStorage for testing
+            localStorage.setItem('raheem_test_token', token);
+        }
+        
+        async function testLogin() {
+            const email = document.getElementById('testEmail').value;
+            const password = document.getElementById('testPassword').value;
+            
+            const resultDiv = document.getElementById('loginResult');
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                const formData = new FormData();
+                formData.append('email', email);
+                formData.append('password', password);
+                
+                const response = await fetch('../api/deploy.php?action=login', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                let html = `<strong>Response:</strong><br>`;
+                html += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                
+                if (data.success && data.session_token) {
+                    html += `<br><strong>Session Token:</strong><br>`;
+                    html += `<div class="token">${data.session_token}</div>`;
+                    
+                    // Check format
+                    html += `<br><strong>Token Analysis:</strong><br>`;
+                    html += `Starts with RAHEEM-: ${data.session_token.startsWith('RAHEEM-') ? '✅' : '❌'}<br>`;
+                    html += `Starts with RAHEEM-XMD~: ${data.session_token.startsWith('RAHEEM-XMD~') ? '✅' : '❌'}<br>`;
+                    html += `Length: ${data.session_token.length} characters`;
+                    
+                    // Save to localStorage
+                    localStorage.setItem('raheem_session_token', data.session_token);
+                    localStorage.setItem('raheem_user_data', JSON.stringify(data.user || {}));
+                }
+                
+                resultDiv.innerHTML = html;
+            } catch (error) {
+                resultDiv.innerHTML = `Error: ${error.message}`;
+            }
+        }
+        
+        function checkSession() {
+            const token = localStorage.getItem('raheem_session_token');
+            const user = localStorage.getItem('raheem_user_data');
+            
+            let html = `<strong>LocalStorage Session:</strong><br>`;
+            
+            if (token) {
+                html += `<div class="token">${token}</div>`;
+                html += `<br><strong>Format:</strong> `;
+                
+                if (token.startsWith('RAHEEM-')) {
+                    html += `✅ RAHEEM-XXXXXX`;
+                } else if (token.startsWith('RAHEEM-XMD~')) {
+                    html += `✅ RAHEEM-XMD~XXXX`;
+                } else {
+                    html += `❌ Unknown format`;
+                }
+                
+                html += `<br><strong>User Data:</strong><br>`;
+                
+                if (user) {
+                    try {
+                        const userData = JSON.parse(user);
+                        html += `<pre>${JSON.stringify(userData, null, 2)}</pre>`;
+                    } catch (e) {
+                        html += `Invalid JSON`;
+                    }
+                } else {
+                    html += `No user data`;
+                }
+            } else {
+                html += `No session found`;
+            }
+            
+            document.getElementById('sessionResult').innerHTML = html;
+        }
+        
+        function clearSession() {
+            localStorage.removeItem('raheem_session_token');
+            localStorage.removeItem('raheem_user_data');
+            document.getElementById('sessionResult').innerHTML = 'Session cleared ✅';
+        }
+        
+        async function testAPI(endpoint) {
+            const resultDiv = document.getElementById('apiResult');
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                let url = `../api/deploy.php?action=${endpoint}`;
+                
+                if (endpoint === 'check_session') {
+                    const token = localStorage.getItem('raheem_session_token') || 'RAHEEM-TEST123';
+                    url += `&token=${encodeURIComponent(token)}`;
+                }
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <strong>Endpoint: ${endpoint}</strong><br>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `Error: ${error.message}`;
+            }
+        }
+        
+        // Auto-check on load
+        window.onload = function() {
+            checkSession();
+        };
+    </script>
+</body>
+</html>
