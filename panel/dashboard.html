@@ -1,0 +1,239 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Nyoni Bot Panel</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="panel.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="panel-page">
+    <div id="particles-js"></div>
+    
+    <div class="panel-container dashboard-container">
+        <div class="dashboard-header">
+            <div class="dashboard-nav">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>Nyoni<span class="logo-highlight">Bot</span> Dashboard</span>
+                </div>
+                <div class="user-menu">
+                    <div class="user-info">
+                        <span id="username">Loading...</span>
+                        <small id="user-email">user@example.com</small>
+                    </div>
+                    <button class="btn-logout" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <i class="fas fa-robot"></i>
+                <h3 id="total-bots">4</h3>
+                <p>Total Bots</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-check-circle"></i>
+                <h3 id="active-bots">2</h3>
+                <p>Active Bots</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <h3>99.9%</h3>
+                <p>Uptime</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-server"></i>
+                <h3>640MB</h3>
+                <p>Memory Used</p>
+            </div>
+        </div>
+        
+        <div class="dashboard-content">
+            <div class="section-title">
+                <h2>Your Bots</h2>
+                <a href="#deploy" class="btn-primary">
+                    <i class="fas fa-plus"></i> Deploy New Bot
+                </a>
+            </div>
+            
+            <div class="bots-grid">
+                <!-- Bots will be loaded dynamically -->
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading bots...
+                </div>
+            </div>
+            
+            <div class="section-title" id="deploy">
+                <h2>Deploy New Bot</h2>
+            </div>
+            
+            <form class="deploy-form" id="deploy-form">
+                <div class="form-group">
+                    <label for="bot-name">
+                        <i class="fas fa-robot"></i> Bot Name
+                    </label>
+                    <input type="text" id="bot-name" placeholder="My Awesome Bot" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bot-type">
+                        <i class="fas fa-code-branch"></i> Bot Type
+                    </label>
+                    <select id="bot-type" required>
+                        <option value="">Select bot type</option>
+                        <option value="discord">Discord Bot</option>
+                        <option value="telegram">Telegram Bot</option>
+                        <option value="whatsapp">WhatsApp Bot</option>
+                        <option value="slack">Slack Bot</option>
+                        <option value="custom">Custom Bot</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bot-token">
+                        <i class="fas fa-key"></i> Bot Token (Optional)
+                    </label>
+                    <input type="password" id="bot-token" placeholder="Enter your bot token if you have one">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-file-upload"></i> Upload Bot Files
+                    </label>
+                    <div class="file-upload">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop your bot files here</p>
+                        <p class="file-names">or click to browse</p>
+                        <input type="file" id="bot-files" multiple accept=".js,.py,.json,.txt,.zip">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bot-config">
+                        <i class="fas fa-cog"></i> Configuration (JSON)
+                    </label>
+                    <textarea id="bot-config" rows="4" placeholder='{
+  "prefix": "!",
+  "admins": ["your_id"],
+  "settings": {
+    "autoStart": true,
+    "restartOnCrash": true
+  }
+}'></textarea>
+                </div>
+                
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-rocket"></i> Deploy Bot
+                </button>
+            </form>
+        </div>
+        
+        <div class="panel-footer">
+            <p>Need help? <a href="#">Read our documentation</a> or <a href="#">contact support</a></p>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="../assets/js/particles.js"></script>
+    <script src="panel.js"></script>
+    <script>
+        // Dashboard specific initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update stats after bots are loaded
+            setTimeout(() => {
+                document.getElementById('total-bots').textContent = '4';
+                document.getElementById('active-bots').textContent = '2';
+            }, 1000);
+            
+            // Add styles for loading
+            const style = document.createElement('style');
+            style.textContent = `
+                .loading {
+                    text-align: center;
+                    padding: 40px;
+                    grid-column: 1 / -1;
+                    color: var(--gray);
+                }
+                
+                .loading i {
+                    margin-right: 10px;
+                }
+                
+                .dashboard-nav {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                
+                .user-menu {
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                }
+                
+                .user-info {
+                    text-align: right;
+                }
+                
+                .user-info span {
+                    display: block;
+                    font-weight: 600;
+                }
+                
+                .user-info small {
+                    color: var(--gray);
+                    font-size: 0.9rem;
+                }
+                
+                .btn-logout {
+                    background: rgba(239, 68, 68, 0.2);
+                    color: #EF4444;
+                    border: 1px solid rgba(239, 68, 68, 0.3);
+                    padding: 8px 20px;
+                    border-radius: var(--border-radius-sm);
+                    cursor: pointer;
+                    transition: var(--transition);
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+                
+                .btn-logout:hover {
+                    background: rgba(239, 68, 68, 0.3);
+                    transform: translateY(-2px);
+                }
+                
+                .section-title {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin: 40px 0 20px;
+                }
+                
+                select, textarea {
+                    width: 100%;
+                    padding: 15px;
+                    background: var(--darker);
+                    border: 2px solid rgba(124, 58, 237, 0.2);
+                    border-radius: var(--border-radius-sm);
+                    color: var(--light);
+                    font-size: 1rem;
+                    transition: var(--transition);
+                }
+                
+                select:focus, textarea:focus {
+                    outline: none;
+                    border-color: var(--primary);
+                    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+  </html>
