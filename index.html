@@ -1,93 +1,101 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nyoni Bot - Deploy Your Bot Free</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Nyoni Bot Site - Free WhatsApp Bot Hosting</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="assets/images/logo.png">
 </head>
 <body>
+    <!-- Background Particles -->
     <div id="particles-js"></div>
     
     <!-- Navigation -->
     <nav class="navbar">
-        <div class="nav-container">
+        <div class="container">
             <div class="logo">
-                <i class="fas fa-robot"></i>
-                <span>Nyoni<span class="logo-highlight">Bot</span></span>
+                <img src="assets/images/logo.png" alt="Nyoni Bot Site" class="logo-img">
+                <div class="logo-text">
+                    <h1>Nyoni Bot Site</h1>
+                    <p>Free WhatsApp Bot Hosting</p>
+                </div>
             </div>
             <ul class="nav-menu">
-                <li><a href="#home" class="active">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#how-to">How To</a></li>
-                <li><a href="#pricing">Pricing</a></li>
-                <li><a href="panel/index.html" class="btn-login">Login</a></li>
-                <li><a href="panel/index.html" class="btn-register">Register</a></li>
+                <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#features"><i class="fas fa-star"></i> Features</a></li>
+                <li><a href="#pricing"><i class="fas fa-tag"></i> Pricing</a></li>
+                <li><a href="#deploy"><i class="fas fa-rocket"></i> Deploy</a></li>
+                <li><a href="panel/index.html" class="nav-btn"><i class="fas fa-sign-in-alt"></i> Login</a></li>
             </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+            <div class="mobile-toggle">
+                <i class="fas fa-bars"></i>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-container">
-            <div class="hero-content">
-                <h1 class="hero-title animate-pop">Deploy Your Bot <span class="gradient-text">Instantly & Free</span></h1>
-                <p class="hero-subtitle">Create, deploy, and manage your Discord, Telegram, and WhatsApp bots with our powerful platform. No coding experience required!</p>
-                <div class="hero-buttons">
-                    <a href="panel/index.html" class="btn-primary">
-                        <i class="fas fa-rocket"></i> Get Started Free
-                    </a>
-                    <a href="#how-to" class="btn-secondary">
-                        <i class="fas fa-play-circle"></i> Watch Demo
-                    </a>
-                </div>
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content animate__animated animate__fadeInLeft">
+                <h1 class="hero-title">Deploy Your WhatsApp Bot <span class="gradient-text">FREE</span> in Seconds</h1>
+                <p class="hero-subtitle">Professional WhatsApp bot hosting with 24/7 uptime, auto-restart, and full control panel. No credit card required.</p>
                 <div class="hero-stats">
                     <div class="stat">
-                        <h3>1,500+</h3>
-                        <p>Bots Deployed</p>
+                        <i class="fas fa-robot"></i>
+                        <div>
+                            <h3>2,500+</h3>
+                            <p>Bots Deployed</p>
+                        </div>
                     </div>
                     <div class="stat">
-                        <h3>24/7</h3>
-                        <p>Uptime</p>
+                        <i class="fas fa-bolt"></i>
+                        <div>
+                            <h3>99.9%</h3>
+                            <p>Uptime</p>
+                        </div>
                     </div>
                     <div class="stat">
-                        <h3>100%</h3>
-                        <p>Free</p>
+                        <i class="fas fa-user-friends"></i>
+                        <div>
+                            <h3>5,000+</h3>
+                            <p>Active Users</p>
+                        </div>
                     </div>
                 </div>
+                <div class="hero-buttons">
+                    <a href="#deploy" class="btn btn-primary btn-lg">
+                        <i class="fas fa-rocket"></i> Deploy Free Bot
+                    </a>
+                    <a href="panel/index.html" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-tachometer-alt"></i> Go to Panel
+                    </a>
+                </div>
             </div>
-            <div class="hero-image">
-                <div class="bot-preview">
-                    <div class="bot-screen">
-                        <div class="bot-header">
-                            <div class="bot-dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
-                            </div>
-                            <span>NyoniBot Dashboard</span>
+            <div class="hero-image animate__animated animate__fadeInRight">
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-buttons">
+                            <span class="close"></span>
+                            <span class="minimize"></span>
+                            <span class="maximize"></span>
                         </div>
-                        <div class="bot-content">
-                            <div class="bot-message">
-                                <div class="avatar">N</div>
-                                <div class="message">Bot deployed successfully!</div>
-                            </div>
-                            <div class="bot-message user">
-                                <div class="avatar">U</div>
-                                <div class="message">Start my Discord bot</div>
-                            </div>
-                            <div class="bot-message">
-                                <div class="avatar">N</div>
-                                <div class="message">✅ Bot is now online!</div>
-                            </div>
-                        </div>
+                        <span class="terminal-title">bot-deploy.sh</span>
+                    </div>
+                    <div class="terminal-body">
+                        <p><span class="terminal-prompt">$</span> npm install @whiskeysockets/baileys</p>
+                        <p><span class="terminal-success">✓</span> Dependencies installed</p>
+                        <p><span class="terminal-prompt">$</span> node deploy-bot.js</p>
+                        <p><span class="terminal-success">✓</span> Bot connected to WhatsApp</p>
+                        <p><span class="terminal-prompt">$</span> Bot Status: <span class="terminal-status">🟢 ONLINE</span></p>
+                        <p><span class="terminal-info">ℹ️</span> Free hosting activated</p>
+                        <p><span class="terminal-info">ℹ️</span> Auto-restart enabled</p>
+                        <p><span class="terminal-prompt">$</span> Your bot is ready at: <span class="terminal-link">https://nyoni.site/bot-12345</span></p>
                     </div>
                 </div>
             </div>
@@ -95,210 +103,274 @@
     </section>
 
     <!-- Features Section -->
-    <section class="features" id="features">
+    <section id="features" class="features">
         <div class="container">
-            <h2 class="section-title">Why Choose <span class="gradient-text">Nyoni Bot</span></h2>
-            <p class="section-subtitle">Everything you need to build amazing bots</p>
-            
+            <div class="section-header">
+                <h2 class="section-title">Why Choose <span class="gradient-text">Nyoni Bot Site</span></h2>
+                <p class="section-subtitle">Everything you need to run your WhatsApp bot 24/7</p>
+            </div>
             <div class="features-grid">
-                <div class="feature-card animate-fade">
+                <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-bolt"></i>
                     </div>
                     <h3>Instant Deployment</h3>
-                    <p>Deploy your bot in seconds with our one-click deployment system.</p>
+                    <p>Deploy your bot in seconds with one-click. No complicated setup required.</p>
                 </div>
-                
-                <div class="feature-card animate-fade">
+                <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-shield-alt"></i>
                     </div>
-                    <h3>Secure & Reliable</h3>
-                    <p>Enterprise-grade security with 99.9% uptime guarantee.</p>
+                    <h3>Free Forever</h3>
+                    <p>Completely free hosting with no hidden charges. Unlimited bots per user.</p>
                 </div>
-                
-                <div class="feature-card animate-fade">
+                <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-infinity"></i>
+                        <i class="fas fa-sync-alt"></i>
                     </div>
-                    <h3>Unlimited Bots</h3>
-                    <p>Create as many bots as you want. No limits on deployment.</p>
+                    <h3>Auto-Restart</h3>
+                    <p>Automatic restart on crash. Your bot stays online 24/7 without manual intervention.</p>
                 </div>
-                
-                <div class="feature-card animate-fade">
-                    <div class="feature-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h3>Multi-Language</h3>
-                    <p>Supports JavaScript, Python, and more programming languages.</p>
-                </div>
-                
-                <div class="feature-card animate-fade">
+                <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
-                    <h3>Advanced Analytics</h3>
-                    <p>Track your bot's performance with detailed analytics dashboard.</p>
+                    <h3>Real-time Monitoring</h3>
+                    <p>Monitor your bot's performance, logs, and status from the dashboard.</p>
                 </div>
-                
-                <div class="feature-card animate-fade">
+                <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-headset"></i>
+                        <i class="fas fa-database"></i>
                     </div>
-                    <h3>24/7 Support</h3>
-                    <p>Get help anytime from our dedicated support team.</p>
+                    <h3>Free Database</h3>
+                    <p>Built-in JSON database for storing user data, settings, and bot configurations.</p>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How To Section -->
-    <section class="how-to" id="how-to">
-        <div class="container">
-            <h2 class="section-title">How to <span class="gradient-text">Deploy</span></h2>
-            <p class="section-subtitle">Get your bot running in 3 easy steps</p>
-            
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>Create Account</h3>
-                        <p>Sign up for free in less than a minute. No credit card required.</p>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
                     </div>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>Upload Your Bot</h3>
-                        <p>Upload your bot files or use our templates to get started quickly.</p>
-                    </div>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>Deploy & Manage</h3>
-                        <p>Click deploy and manage your bot from our intuitive dashboard.</p>
-                    </div>
+                    <h3>Mobile Friendly</h3>
+                    <p>Access and manage your bots from any device with our responsive panel.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Pricing Section -->
-    <section class="pricing" id="pricing">
+    <section id="pricing" class="pricing">
         <div class="container">
-            <h2 class="section-title">Simple <span class="gradient-text">Pricing</span></h2>
-            <p class="section-subtitle">Free forever plan with premium options</p>
-            
+            <div class="section-header">
+                <h2 class="section-title">Simple & <span class="gradient-text">Transparent</span> Pricing</h2>
+                <p class="section-subtitle">Choose the plan that fits your needs</p>
+            </div>
             <div class="pricing-cards">
-                <div class="pricing-card">
+                <div class="pricing-card free">
                     <div class="pricing-header">
-                        <h3>Free</h3>
-                        <div class="price">$0<span>/month</span></div>
+                        <h3>FREE PLAN</h3>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">0</span>
+                            <span class="period">/forever</span>
+                        </div>
+                        <p>Perfect for beginners</p>
                     </div>
                     <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> 5 Bots</li>
+                        <li><i class="fas fa-check"></i> 1 WhatsApp Bot</li>
                         <li><i class="fas fa-check"></i> 24/7 Uptime</li>
-                        <li><i class="fas fa-check"></i> 512MB RAM</li>
-                        <li><i class="fas fa-check"></i> Basic Support</li>
-                        <li><i class="fas fa-check"></i> Community Access</li>
+                        <li><i class="fas fa-check"></i> Auto-restart</li>
+                        <li><i class="fas fa-check"></i> Basic Monitoring</li>
+                        <li><i class="fas fa-check"></i> Community Support</li>
+                        <li><i class="fas fa-check"></i> JSON Database</li>
                     </ul>
-                    <a href="panel/index.html" class="btn-pricing">Get Started</a>
+                    <a href="#deploy" class="btn btn-primary btn-block">Get Started Free</a>
                 </div>
-                
-                <div class="pricing-card popular">
+                <div class="pricing-card pro">
                     <div class="popular-badge">MOST POPULAR</div>
                     <div class="pricing-header">
-                        <h3>Pro</h3>
-                        <div class="price">$9<span>/month</span></div>
+                        <h3>PRO PLAN</h3>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">5</span>
+                            <span class="period">/month</span>
+                        </div>
+                        <p>For growing businesses</p>
                     </div>
                     <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> 20 Bots</li>
+                        <li><i class="fas fa-check"></i> 5 WhatsApp Bots</li>
                         <li><i class="fas fa-check"></i> Priority Support</li>
-                        <li><i class="fas fa-check"></i> 2GB RAM</li>
+                        <li><i class="fas fa-check"></i> Advanced Monitoring</li>
                         <li><i class="fas fa-check"></i> Custom Domains</li>
-                        <li><i class="fas fa-check"></i> Advanced Analytics</li>
+                        <li><i class="fas fa-check"></i> API Access</li>
+                        <li><i class="fas fa-check"></i> SSL Certificate</li>
                     </ul>
-                    <a href="panel/index.html" class="btn-pricing">Upgrade Now</a>
+                    <a href="#deploy" class="btn btn-primary btn-block">Upgrade to Pro</a>
                 </div>
-                
-                <div class="pricing-card">
+                <div class="pricing-card enterprise">
                     <div class="pricing-header">
-                        <h3>Enterprise</h3>
-                        <div class="price">$29<span>/month</span></div>
+                        <h3>ENTERPRISE</h3>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">20</span>
+                            <span class="period">/month</span>
+                        </div>
+                        <p>For large deployments</p>
                     </div>
                     <ul class="pricing-features">
                         <li><i class="fas fa-check"></i> Unlimited Bots</li>
-                        <li><i class="fas fa-check"></i> 24/7 Phone Support</li>
-                        <li><i class="fas fa-check"></i> 8GB RAM</li>
                         <li><i class="fas fa-check"></i> Dedicated Server</li>
+                        <li><i class="fas fa-check"></i> 24/7 Phone Support</li>
+                        <li><i class="fas fa-check"></i> Custom Features</li>
+                        <li><i class="fas fa-check"></i> Team Management</li>
                         <li><i class="fas fa-check"></i> SLA Guarantee</li>
                     </ul>
-                    <a href="panel/index.html" class="btn-pricing">Contact Sales</a>
+                    <a href="#deploy" class="btn btn-primary btn-block">Contact Sales</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
+    <!-- Deploy Section -->
+    <section id="deploy" class="deploy">
         <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <div class="logo">
-                        <i class="fas fa-robot"></i>
-                        <span>Nyoni<span class="logo-highlight">Bot</span></span>
+            <div class="section-header">
+                <h2 class="section-title">Deploy Your Bot <span class="gradient-text">in 3 Steps</span></h2>
+                <p class="section-subtitle">Get your WhatsApp bot running in minutes</p>
+            </div>
+            <div class="deploy-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Create Account</h3>
+                        <p>Sign up with your email or GitHub account. No verification required.</p>
                     </div>
-                    <p>Deploy your bots instantly with our powerful and free platform.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Upload Bot Code</h3>
+                        <p>Upload your bot files or use our template. We support Node.js and Baileys.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Deploy & Run</h3>
+                        <p>Click deploy and your bot will be live instantly. Get your bot URL and start using.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="deploy-form">
+                <h3>Ready to Deploy?</h3>
+                <form id="deployForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="botName"><i class="fas fa-robot"></i> Bot Name</label>
+                            <input type="text" id="botName" placeholder="MyAwesomeBot" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="botType"><i class="fas fa-cogs"></i> Bot Type</label>
+                            <select id="botType" required>
+                                <option value="">Select bot type</option>
+                                <option value="baileys">Baileys WhatsApp Bot</option>
+                                <option value="whatsapp-web">WhatsApp Web JS</option>
+                                <option value="venom">Venom Bot</option>
+                                <option value="custom">Custom Bot</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="botCode"><i class="fas fa-code"></i> Bot Code (Paste your index.js)</label>
+                        <textarea id="botCode" rows="10" placeholder="// Paste your WhatsApp bot code here
+const { default: makeWASocket } = require('@whiskeysockets/baileys');
+const fs = require('fs');
+
+async function startBot() {
+    const sock = makeWASocket({
+        printQRInTerminal: true
+    });
+    
+    sock.ev.on('connection.update', (update) => {
+        // Your connection logic
+    });
+    
+    console.log('🤖 Bot is running!');
+}
+
+startBot();" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="packageJson"><i class="fas fa-file-code"></i> package.json (Optional)</label>
+                        <textarea id="packageJson" rows="5" placeholder='{
+  "name": "my-whatsapp-bot",
+  "version": "1.0.0",
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.5.0"
+  }
+}'></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">
+                        <i class="fas fa-rocket"></i> Deploy Bot Now
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="assets/images/logo.png" alt="Logo" class="footer-logo-img">
+                    <h3>Nyoni Bot Site</h3>
+                    <p>Free WhatsApp Bot Hosting Platform</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-github"></i></a>
                         <a href="#"><i class="fab fa-discord"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
                     </div>
                 </div>
-                
-                <div class="footer-col">
+                <div class="footer-links">
                     <h4>Platform</h4>
-                    <ul>
-                        <li><a href="#">Features</a></li>
-                        <li><a href="#">Pricing</a></li>
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="#">API Reference</a></li>
-                    </ul>
+                    <a href="#home">Home</a>
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#deploy">Deploy</a>
+                    <a href="panel/index.html">Panel</a>
                 </div>
-                
-                <div class="footer-col">
-                    <h4>Community</h4>
-                    <ul>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Forum</a></li>
-                        <li><a href="#">Discord</a></li>
-                        <li><a href="#">GitHub</a></li>
-                    </ul>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <a href="#">Documentation</a>
+                    <a href="#">API Reference</a>
+                    <a href="#">Bot Templates</a>
+                    <a href="#">Community</a>
+                    <a href="#">Blog</a>
                 </div>
-                
-                <div class="footer-col">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Status</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
+                <div class="footer-links">
+                    <h4>Legal</h4>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Cookie Policy</a>
+                    <a href="#">Acceptable Use</a>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact Us</h4>
+                    <p><i class="fas fa-envelope"></i> support@nyonibotsite.com</p>
+                    <p><i class="fab fa-whatsapp"></i> +255 610 209 120</p>
+                    <p><i class="fas fa-globe"></i> https://nyonibotsite.com</p>
                 </div>
             </div>
-            
             <div class="footer-bottom">
-                <p>&copy; 2024 Nyoni Bot. All rights reserved.</p>
+                <p>&copy; 2024 Nyoni Bot Site. All rights reserved. | Free WhatsApp Bot Hosting</p>
+                <p>Made with <i class="fas fa-heart" style="color: #ff6b6b;"></i> by Nyoni-XMD</p>
             </div>
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script src="script.js"></script>
     <script src="assets/js/particles.js"></script>
+    <script src="script.js"></script>
 </body>
-    </html>
+</html>
