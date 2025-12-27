@@ -1,279 +1,441 @@
- <?php
+<?php
+// api/deploy.php - UPDATED FOR YOUR SESSION FORMAT
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
 
-// Handle preflight requests
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
+// Data directory
+$dataDir = __DIR__ . '/../data/';
 
-// Database configuration
-$config = json_decode(file_get_contents('../data/config.json'), true);
-$data_dir = '../data/';
+// Get action
+$action = $_GET['action'] ?? $_POST['action'] ?? '';
 
-// Function to generate unique ID
-function generateId($length = 8) {
-    return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)))),1,$length);
-}
-
-// Function to validate session
-function validateSession() {
-    if (!isset($_COOKIE['session_token'])) {
-        return false;
+// Special function for your session format
+function generateRaheemSession() {
+    $prefix = 'RAHEEM-';
+    $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $random = '';
+    
+    for ($i = 0; $i < 8; $i++) {
+        $random .= $characters[rand(0, strlen($characters) - 1)];
     }
     
-    $sessions = json_decode(file_get_contents('../data/sessions.json'), true) ?? [];
-    $sessionToken = $_COOKIE['session_token'];
+    return $prefix . $random;
+}
+
+// Function to validate your session
+function validateRaheemSession($sessionToken) {
+    if (strpos($sessionToken, 'RAHEEM-') === 0) {
+        return true;
+    }
     
-    foreach ($sessions as $session) {
-        if ($session['token'] === $sessionToken && $session['expires'] > time()) {
-            return $session['user_id'];
-        }
+    // Also check for RAHEEM-XMD~ format
+    if (strpos($sessionToken, 'RAHEEM-XMD~') === 0) {
+        return true;
     }
     
     return false;
 }
 
-// API Routes
-$route = $_GET['action'] ?? '';
-
-switch ($route) {
-    case 'deploy':
-        handleDeploy();
-        break;
-    case 'status':
-        handleStatus();
-        break;
+switch ($action) {
     case 'login':
-        handleLogin();
+        handleRaheemLogin();
         break;
     case 'register':
-        handleRegister();
+        handleRaheemRegister();
         break;
-    case 'logout':
-        handleLogout();
+    case 'deploy':
+        handleRaheemDeploy();
         break;
     case 'get_bots':
-        handleGetBots();
+        handleRaheemGetBots();
+        break;
+    case 'check_session':
+        handleCheckSession();
         break;
     default:
-        echo json_encode(['error' => 'Invalid action']);
+        echo json_encode([
+            'status' => 'online',
+            'server' => 'Nyoni Bot',
+            'version' => '1.0',
+            'session_format' => 'RAHEEM-XXXXXX'
+        ]);
         break;
 }
 
-function handleDeploy() {
-    $userId = validateSession();
-    if (!$userId) {
-        echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+function handleRaheemLogin() {
+    $input = file_get_contents('php://input');
+    $data = json_decode($input, true);
+    
+    // If no JSON, check form data
+    if (!$data) {
+        $data = $_POST;
+    }
+    
+    $email = $data['email'] ?? '';
+    $password = $data['password'] ?? '';
+    
+    if (!$email || !$password) {
+        echo json_encode([
+            'success' => false,
+            'error' => 'Email na password zinahitajika',
+            'code' => 'MISSING_FIELDS'
+        ]);
         return;
     }
     
-    $data = json_decode(file_get_contents('php://input'), true);
-    
-    if (!$data || !isset($data['bot_name']) || !isset($data['bot_type'])) {
-        echo json_encode(['success' => false, 'error' => 'Invalid data']);
-        return;
+    // Load users
+    $usersFile = __DIR__ . '/../data/users.json';
+    if (!file_exists($usersFile)) {
+        createDefaultUsers();
     }
     
-    $botId = generateId();
-    $botData = [
-        'id' => $botId,
-        'user_id' => $userId,
-        'name' => $data['bot_name'],
-        'type' => $data['bot_type'],
-        'status' => 'pending',
-        'created_at' => time(),
-        'updated_at' => time(),
-        'config' => $data['config'] ?? [],
-        'token' => $data['token'] ?? null,
-        'memory_limit' => '512MB',
-        'uptime' => 0
-    ];
+    $users = json_decode(file_get_contents($usersFile), true);
     
-    // Save bot data
-    $bots = json_decode(file_get_contents('../data/deployments.json'), true) ?? [];
-    $bots[] = $botData;
-    file_put_contents('../data/deployments.json', json_encode($bots, JSON_PRETTY_PRINT));
-    
-    // Create bot directory
-    $botDir = "../bots/$botId";
-    if (!file_exists($botDir)) {
-        mkdir($botDir, 0777, true);
-    }
-    
-    // Save bot files if provided
-    if (isset($data['files']) && is_array($data['files'])) {
-        foreach ($data['files'] as $filename => $content) {
-            file_put_contents("$botDir/$filename", base64_decode($content));
+    // Check user
+    $foundUser = null;
+    foreach ($users as $user) {
+        if (($user['email'] === $email || $user['username'] === $email) && 
+            $user['password'] === $password) {
+            $foundUser = $user;
+            break;
         }
     }
     
-    // Simulate deployment process
-    $logEntry = [
-        'bot_id' => $botId,
-        'action' => 'deploy',
-        'status' => 'success',
-        'message' => 'Bot deployment initiated',
-        'timestamp' => time()
+    if (!$foundUser) {
+        // Auto-create user if not found (demo mode)
+        $newUser = [
+            'id' => 'user_' . time(),
+            'username' => explode('@', $email)[0] ?? 'user',
+            'email' => $email,
+            'password' => $password,
+            'plan' => 'free',
+            'max_bots' => 5,
+            'created_at' => time(),
+            'last_login' => time()
+        ];
+        
+        $users[] = $newUser;
+        file_put_contents($usersFile, json_encode($users, JSON_PRETTY_PRINT));
+        $foundUser = $newUser;
+    }
+    
+    // Generate RAHEEM session token
+    $sessionToken = generateRaheemSession();
+    
+    // Save session
+    $sessionsFile = __DIR__ . '/../data/sessions.json';
+    $sessions = file_exists($sessionsFile) ? 
+                json_decode(file_get_contents($sessionsFile), true) : [];
+    
+    $sessionData = [
+        'session_id' => $sessionToken,
+        'user_id' => $foundUser['id'],
+        'token' => $sessionToken,
+        'created_at' => time(),
+        'expires_at' => time() + (7 * 24 * 60 * 60),
+        'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+        'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown'
     ];
     
-    $logs = json_decode(file_get_contents('../data/logs.json'), true) ?? [];
-    $logs[] = $logEntry;
-    file_put_contents('../data/logs.json', json_encode($logs, JSON_PRETTY_PRINT));
+    $sessions[] = $sessionData;
+    file_put_contents($sessionsFile, json_encode($sessions, JSON_PRETTY_PRINT));
     
+    // Return success with RAHEEM token
     echo json_encode([
         'success' => true,
-        'message' => 'Bot deployment started',
-        'bot_id' => $botId,
-        'status' => 'pending'
+        'message' => 'Login successful',
+        'session_token' => $sessionToken,
+        'session_type' => 'RAHEEM',
+        'user' => [
+            'id' => $foundUser['id'],
+            'username' => $foundUser['username'],
+            'email' => $foundUser['email'],
+            'plan' => $foundUser['plan']
+        ],
+        'redirect' => 'panel/dashboard.html'
     ]);
 }
 
-function handleStatus() {
-    $botId = $_GET['bot_id'] ?? '';
+function handleRaheemRegister() {
+    $input = file_get_contents('php://input');
+    $data = json_decode($input, true);
     
-    if (!$botId) {
-        echo json_encode(['success' => false, 'error' => 'Bot ID required']);
+    if (!$data) {
+        $data = $_POST;
+    }
+    
+    $username = $data['username'] ?? '';
+    $email = $data['email'] ?? '';
+    $password = $data['password'] ?? '';
+    
+    if (!$username || !$email || !$password) {
+        echo json_encode([
+            'success' => false,
+            'error' => 'Sehemu zote zinahitajika'
+        ]);
         return;
     }
     
-    $bots = json_decode(file_get_contents('../data/deployments.json'), true) ?? [];
+    $usersFile = __DIR__ . '/../data/users.json';
+    $users = file_exists($usersFile) ? 
+             json_decode(file_get_contents($usersFile), true) : [];
     
-    foreach ($bots as $bot) {
-        if ($bot['id'] === $botId) {
-            echo json_encode([
-                'success' => true,
-                'bot' => $bot
-            ]);
-            return;
-        }
-    }
-    
-    echo json_encode(['success' => false, 'error' => 'Bot not found']);
-}
-
-function handleLogin() {
-    $data = json_decode(file_get_contents('php://input'), true);
-    
-    if (!isset($data['email']) || !isset($data['password'])) {
-        echo json_encode(['success' => false, 'error' => 'Email and password required']);
-        return;
-    }
-    
-    $users = json_decode(file_get_contents('../data/users.json'), true) ?? [];
-    
+    // Check if exists
     foreach ($users as $user) {
-        if ($user['email'] === $data['email'] && password_verify($data['password'], $user['password'])) {
-            // Create session
-            $sessionToken = bin2hex(random_bytes(32));
-            $sessionData = [
-                'user_id' => $user['id'],
-                'token' => $sessionToken,
-                'expires' => time() + (7 * 24 * 60 * 60) // 7 days
-            ];
-            
-            $sessions = json_decode(file_get_contents('../data/sessions.json'), true) ?? [];
-            $sessions[] = $sessionData;
-            file_put_contents('../data/sessions.json', json_encode($sessions, JSON_PRETTY_PRINT));
-            
+        if ($user['email'] === $email) {
             echo json_encode([
-                'success' => true,
-                'message' => 'Login successful',
-                'user' => [
-                    'id' => $user['id'],
-                    'username' => $user['username'],
-                    'email' => $user['email']
-                ],
-                'session_token' => $sessionToken
+                'success' => false,
+                'error' => 'Email tayari imesajiliwa'
             ]);
-            return;
-        }
-    }
-    
-    echo json_encode(['success' => false, 'error' => 'Invalid credentials']);
-}
-
-function handleRegister() {
-    $data = json_decode(file_get_contents('php://input'), true);
-    
-    if (!isset($data['username']) || !isset($data['email']) || !isset($data['password'])) {
-        echo json_encode(['success' => false, 'error' => 'All fields required']);
-        return;
-    }
-    
-    $users = json_decode(file_get_contents('../data/users.json'), true) ?? [];
-    
-    // Check if user exists
-    foreach ($users as $user) {
-        if ($user['email'] === $data['email']) {
-            echo json_encode(['success' => false, 'error' => 'Email already registered']);
-            return;
-        }
-        if ($user['username'] === $data['username']) {
-            echo json_encode(['success' => false, 'error' => 'Username already taken']);
             return;
         }
     }
     
     // Create new user
-    $userId = generateId();
     $newUser = [
-        'id' => $userId,
-        'username' => $data['username'],
-        'email' => $data['email'],
-        'password' => password_hash($data['password'], PASSWORD_DEFAULT),
-        'created_at' => time(),
+        'id' => 'user_' . time() . '_' . bin2hex(random_bytes(4)),
+        'username' => $username,
+        'email' => $email,
+        'password' => $password,
         'plan' => 'free',
-        'max_bots' => 5
+        'max_bots' => 5,
+        'created_at' => time(),
+        'last_login' => time(),
+        'settings' => [
+            'theme' => 'dark',
+            'language' => 'sw'
+        ]
     ];
     
     $users[] = $newUser;
-    file_put_contents('../data/users.json', json_encode($users, JSON_PRETTY_PRINT));
+    file_put_contents($usersFile, json_encode($users, JSON_PRETTY_PRINT));
+    
+    // Generate session
+    $sessionToken = generateRaheemSession();
     
     echo json_encode([
         'success' => true,
-        'message' => 'Registration successful',
+        'message' => 'Akaunti imeundwa',
+        'session_token' => $sessionToken,
         'user' => [
-            'id' => $userId,
-            'username' => $data['username'],
-            'email' => $data['email']
+            'id' => $newUser['id'],
+            'username' => $username,
+            'email' => $email,
+            'plan' => 'free'
         ]
     ]);
 }
 
-function handleLogout() {
-    $sessionToken = $_COOKIE['session_token'] ?? '';
+function handleRaheemDeploy() {
+    $input = file_get_contents('php://input');
+    $data = json_decode($input, true);
     
-    if ($sessionToken) {
-        $sessions = json_decode(file_get_contents('../data/sessions.json'), true) ?? [];
-        $sessions = array_filter($sessions, function($session) use ($sessionToken) {
-            return $session['token'] !== $sessionToken;
-        });
-        
-        file_put_contents('../data/sessions.json', json_encode(array_values($sessions), JSON_PRETTY_PRINT));
+    if (!$data) {
+        $data = $_POST;
     }
     
-    echo json_encode(['success' => true, 'message' => 'Logged out']);
-}
-
-function handleGetBots() {
-    $userId = validateSession();
-    if (!$userId) {
-        echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+    // Check session
+    $sessionToken = $data['session_token'] ?? $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+    
+    if (!validateRaheemSession($sessionToken)) {
+        echo json_encode([
+            'success' => false,
+            'error' => 'Session invalid au imekwisha',
+            'code' => 'INVALID_SESSION'
+        ]);
         return;
     }
     
-    $bots = json_decode(file_get_contents('../data/deployments.json'), true) ?? [];
-    $userBots = array_filter($bots, function($bot) use ($userId) {
-        return $bot['user_id'] === $userId;
+    $botName = $data['bot_name'] ?? '';
+    $botType = $data['bot_type'] ?? 'discord';
+    $config = $data['config'] ?? [];
+    
+    if (!$botName) {
+        echo json_encode([
+            'success' => false,
+            'error' => 'Jina la bot linahitajika'
+        ]);
+        return;
+    }
+    
+    // Create bot
+    $botId = 'bot_' . time() . '_' . bin2hex(random_bytes(4));
+    
+    $newBot = [
+        'id' => $botId,
+        'name' => $botName,
+        'type' => $botType,
+        'status' => 'pending',
+        'config' => $config,
+        'created_at' => time(),
+        'updated_at' => time(),
+        'session_token' => $sessionToken,
+        'memory' => '512MB',
+        'logs' => []
+    ];
+    
+    // Save to deployments
+    $deploymentsFile = __DIR__ . '/../data/deployments.json';
+    $deployments = file_exists($deploymentsFile) ? 
+                   json_decode(file_get_contents($deploymentsFile), true) : [];
+    
+    $deployments[] = $newBot;
+    file_put_contents($deploymentsFile, json_encode($deployments, JSON_PRETTY_PRINT));
+    
+    // Add to logs
+    $logsFile = __DIR__ . '/../data/logs.json';
+    $logs = file_exists($logsFile) ? 
+            json_decode(file_get_contents($logsFile), true) : [];
+    
+    $logs[] = [
+        'id' => 'log_' . time(),
+        'bot_id' => $botId,
+        'action' => 'deploy',
+        'status' => 'started',
+        'message' => 'Bot deployment imeanzishwa',
+        'timestamp' => time(),
+        'session' => $sessionToken
+    ];
+    
+    file_put_contents($logsFile, json_encode($logs, JSON_PRETTY_PRINT));
+    
+    echo json_encode([
+        'success' => true,
+        'message' => 'Bot imeanza kutengenezwa',
+        'bot_id' => $botId,
+        'bot_name' => $botName,
+        'status' => 'pending',
+        'estimated_time' => '30 seconds',
+        'session_token' => $sessionToken
+    ]);
+}
+
+function handleRaheemGetBots() {
+    $sessionToken = $_GET['session_token'] ?? '';
+    
+    if (!validateRaheemSession($sessionToken)) {
+        echo json_encode([
+            'success' => false,
+            'error' => 'Session haikubaliki',
+            'code' => 'SESSION_REQUIRED'
+        ]);
+        return;
+    }
+    
+    $deploymentsFile = __DIR__ . '/../data/deployments.json';
+    if (!file_exists($deploymentsFile)) {
+        echo json_encode([
+            'success' => true,
+            'bots' => [],
+            'count' => 0,
+            'message' => 'Hakuna bots bado'
+        ]);
+        return;
+    }
+    
+    $deployments = json_decode(file_get_contents($deploymentsFile), true);
+    
+    // Filter by session
+    $userBots = array_filter($deployments, function($bot) use ($sessionToken) {
+        return ($bot['session_token'] ?? '') === $sessionToken;
     });
     
     echo json_encode([
         'success' => true,
-        'bots' => array_values($userBots)
+        'bots' => array_values($userBots),
+        'count' => count($userBots),
+        'session' => $sessionToken
     ]);
+}
+
+function handleCheckSession() {
+    $sessionToken = $_GET['token'] ?? '';
+    
+    if (!validateRaheemSession($sessionToken)) {
+        echo json_encode([
+            'valid' => false,
+            'message' => 'Session sio sahihi'
+        ]);
+        return;
+    }
+    
+    $sessionsFile = __DIR__ . '/../data/sessions.json';
+    if (!file_exists($sessionsFile)) {
+        echo json_encode([
+            'valid' => true,
+            'message' => 'Session iko sawa (demo mode)',
+            'session' => $sessionToken,
+            'type' => 'RAHEEM'
+        ]);
+        return;
+    }
+    
+    $sessions = json_decode(file_get_contents($sessionsFile), true);
+    $found = false;
+    
+    foreach ($sessions as $session) {
+        if ($session['token'] === $sessionToken) {
+            $found = true;
+            break;
+        }
+    }
+    
+    echo json_encode([
+        'valid' => $found,
+        'message' => $found ? 'Session iko sawa' : 'Session haipo',
+        'session' => $sessionToken,
+        'format' => 'RAHEEM'
+    ]);
+}
+
+function createDefaultUsers() {
+    $usersFile = __DIR__ . '/../data/users.json';
+    
+    $defaultUsers = [
+        [
+            'id' => 'admin_001',
+            'username' => 'admin',
+            'email' => 'admin@nyonibot.com',
+            'password' => 'admin123',
+            'plan' => 'pro',
+            'max_bots' => 20,
+            'created_at' => time(),
+            'last_login' => time()
+        ],
+        [
+            'id' => 'demo_001',
+            'username' => 'demo',
+            'email' => 'demo@nyonibot.com',
+            'password' => 'demo123',
+            'plan' => 'free',
+            'max_bots' => 5,
+            'created_at' => time(),
+            'last_login' => time()
+        ]
+    ];
+    
+    file_put_contents($usersFile, json_encode($defaultUsers, JSON_PRETTY_PRINT));
+}
+
+// Create data directory if not exists
+if (!file_exists(__DIR__ . '/../data')) {
+    mkdir(__DIR__ . '/../data', 0755, true);
+}
+
+// Create default files if not exist
+$requiredFiles = [
+    'users.json' => '[]',
+    'deployments.json' => '[]',
+    'sessions.json' => '[]',
+    'logs.json' => '[]',
+    'config.json' => '{"site_name":"Nyoni Bot","demo_mode":true}'
+];
+
+foreach ($requiredFiles as $file => $defaultContent) {
+    $filePath = __DIR__ . '/../data/' . $file;
+    if (!file_exists($filePath)) {
+        file_put_contents($filePath, $defaultContent);
+    }
 }
 ?>
